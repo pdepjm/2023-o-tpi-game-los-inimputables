@@ -1,12 +1,24 @@
 import wollok.game.*
+import metodos.*
 
 program juego {
 	
 	game.title("Tetris")
 	
-	game.width(13)
-	game.height(15)
-	game.boardGround("fondo.jpg")
+	game.width(9)
+	game.height(12)
+	game.cellSize(40)
+	game.ground("fondo.jpg")
 	
+	game.addVisual(figura)
+	game.addVisual(figura2)
+	
+	keyboard.down().onPressDo( { figura.moverseHaciaAbajo() } )
+	keyboard.left().onPressDo( { figura.moverseHaciaIzquierda() } )
+	keyboard.right().onPressDo( { figura.moverseHaciaDerecha() } )
+	
+	game.onTick(1500 ,"gravedad",{ figura.moverseHaciaAbajo() } )
+	game.onTick(1500 ,"gravedad",{ figura2.moverseHaciaAbajo() } )
+		
 	game.start()
 }
