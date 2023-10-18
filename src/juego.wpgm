@@ -22,3 +22,45 @@ program juego {
 		
 	game.start()
 }
+
+
+// aca esta lo que no me deja commitear
+
+/*
+import wollok.game.*
+import metodos.*
+
+program juego {
+
+	const listaBloquesPuestos = []
+	//const bloque1 = new Bloque(position = game.at(3,11), color = "bloque_figura2.jpg")
+	//const bloque2 = new Bloque(position = game.at(4,11))
+	const figura1 = new FiguraT()
+	
+	game.title("Tetris")
+	
+	game.width(9)
+	game.height(12)
+	game.cellSize(40)
+	game.ground("fondo.jpg")
+	
+	figura1.init()
+	
+	//game.addVisual(bloque1)
+	//game.addVisual(bloque2)
+	
+	keyboard.up().onPressDo({ (figura1.listaBloques()).forEach({ bloque => bloque.moverseHaciaArriba() }) })
+	keyboard.down().onPressDo({ (figura1.listaBloques()).forEach({ bloque => bloque.moverseHaciaAbajo(figura1.listaBloques(), listaBloquesPuestos) }) })
+	keyboard.left().onPressDo({ (figura1.listaBloques()).forEach({ bloque => bloque.moverseHaciaIzquierda(figura1.listaBloques(), listaBloquesPuestos) }) })
+	keyboard.right().onPressDo({ (figura1.listaBloques()).forEach({ bloque => bloque.moverseHaciaDerecha(figura1.listaBloques(), listaBloquesPuestos) }) })
+
+	game.onTick(1500 ,"gravedad", {(figura1.listaBloques()).forEach({bloque => bloque.moverseHaciaAbajo(figura1.listaBloques(), listaBloquesPuestos) }) })
+	//game.onTick(1500 ,"gravedad",{ bloque2.moverseHaciaAbajo() })
+	
+	//listaBloquesPuestos.addAll(figura1.listaBloques())
+	
+	game.start()
+	
+	//esto es una vergaaaaaaaaaaaaaaaaaaaaaa
+}
+*/
