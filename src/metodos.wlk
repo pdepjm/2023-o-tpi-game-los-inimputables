@@ -12,7 +12,6 @@ class FiguraCuadrada {
 	const property listaBloque = []			//mapa de tiles de la pieza
 	var property relativeX = 4				//origen de la pieza en el mapa X
 	var property relativeY = 10				//origen de la pieza en el mapa Y
-	var property tamanioMatriz = 3		//tamaño de lado de la matriz de la pieza
 	var property enUso = false
 	
 	method inicializarFigura(){
