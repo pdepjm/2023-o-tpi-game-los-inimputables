@@ -1,64 +1,82 @@
 import wollok.game.*
+object amarillo { 
+	method image() = "bloque_amarillo"
+		
+	}
 
-object figura {
-
-	var position = game.at(4,12)
+class Bloque {
+	var property position
+	method image() = "bloque_amarillo.jpg"
+}
+class FiguraCuadrada {
+	const property listaBloque = []			//mapa de tiles de la pieza
+	var property relativeX = 4				//origen de la pieza en el mapa X
+	var property relativeY = 10				//origen de la pieza en el mapa Y
+	var property tamanioMatriz = 3		//tamaño de lado de la matriz de la pieza
+	var property enUso = false
 	
-	method position(nuevaPosicion) { position = nuevaPosicion }
-	
-	method position() = position
-	
-	method moverseHaciaArriba(){
-		self.position(position.up(1))
+	method inicializarFigura(){
+		const bloque1 = new Bloque(position =  new Position(x=relativeX, y=relativeY))
+		const bloque3 = new Bloque(position = new Position(x=relativeX, y=relativeY+1))
+		const bloque2 = new Bloque(position = new Position(x=relativeX+1, y=relativeY))
+		const bloque4 = new Bloque(position = new Position(x=relativeX+1, y=relativeY+1))
+		game.addVisual(bloque1)
+    	game.addVisual(bloque2)
+    	game.addVisual(bloque3)
+    	game.addVisual(bloque4)
+    	listaBloque.add(bloque1)
+		listaBloque.add(bloque2)
+		listaBloque.add(bloque3)
+		listaBloque.add(bloque4)
+   
 	}
+	//Pregunto si el bloque esta fuera del tablero con respecto al eje X
+	method bloqueFueraTabletoX(columnas) = listaBloque.any({bloque => bloque.position().x() > columnas - 1 || bloque.position().x() < 0} )
+ 	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
+ 	method bloqueFueraTabletoY() = listaBloque.any({bloque => bloque.position().y() < 0})
 	
-	method moverseHaciaAbajo(){
-		if (self.position().y() > 0) {
-			self.position(position.down(1))
-		}
+	method colisionConBloque(bloquesDelTablero) =  listaBloque.any({bloque => bloque.position().y() == bloquesDelTablero.position().y() && bloque.position().x() == bloquesDelTablero.position().x()})
+	
+	// Mover izquierda
+	method MoveLeft() {
+		relativeX--
+		listaBloque.forEach({		
+			t => t.position(new Position(x = t.position().x() - 1, 
+										 y = t.position().y() 
+			))
+		})
 	}
-	
-	method moverseHaciaIzquierda(){
-		if (self.position().x() > 0) { self.position(position.left(1)) }
+	// Mover derecha
+	method MoveRight() {
+		relativeX++
+		listaBloque.forEach({		
+			t => t.position(new Position(x = t.position().x() + 1, 
+										 y = t.position().y() 
+			))
+		})
 	}
-	
-	method moverseHaciaDerecha(){
-		if (self.position().x() < 8) {self.position(position.right(1))}
+	// Mover arriba (se utiliza al chequear colision)
+	method MoveUp() {
+		relativeY++
+		listaBloque.forEach({		
+			t => t.position(new Position(x = t.position().x(), 
+										 y = t.position().y() + 1
+			))
+		})
 	}
-	
-	method image() = "figura_ejemplo_inPixio.jpg"
+	// Mover abajo 
+	method MoveDown() {
+		relativeY--
+		listaBloque.forEach({		
+			t => t.position(new Position(x = t.position().x(), 
+										 y = t.position().y() - 1
+			))
+		})
+	}
 
 }
 
-object figura2 {
 
-	var position = game.at(5,12)
-	
-	method position(nuevaPosicion) { position = nuevaPosicion }
-	
-	method position() = position
-	
-	method moverseHaciaArriba(){
-		self.position(position.up(1))
-	}
-	
-	method moverseHaciaAbajo(){
-		if (self.position().y() > 0 and self.position().y() != figura.position().y() + 1 and self.position().x() != figura.position().x()) {
-			self.position(position.down(1))
-		}
-	}
-	
-	method moverseHaciaIzquierda(){
-		if (self.position().x() > 0) { self.position(position.left(1)) }
-	}
-	
-	method moverseHaciaDerecha(){
-		if (self.position().x() < 8) {self.position(position.right(1))}
-	}
-	
-	method image() = "figura_ejemplo_inPixio_2.jpg"
-
-}
 
 // aca esta lo que no me deja commitear
 
@@ -171,5 +189,4 @@ class Bloque {
 	
 	method image() = "bloque_figura.jpg"
 }
-*/
 */
