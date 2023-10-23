@@ -1,6 +1,7 @@
 import wollok.game.*
 import metodos.*
 import controller.*
+
 program juego {
 	
 	controller.start()

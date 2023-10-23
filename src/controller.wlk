@@ -1,19 +1,18 @@
 import wollok.game.*
 import metodos.*
+
 object controller {
 	const filas = 12
 	const columnas =9 
 	var property bloquesDelTablero = []
 	var property figuraActiva			// Pieza activa del juego
-	var property siguienteFigura		// Siguiente Pieza
-	const property listaDeFiguras = []
+	const property listaDeFiguras = [new FiguraCuadrada(), new FiguraTe()]
+	const siguienteFigura = listaDeFiguras.anyOne()		// Siguiente Pieza
 	
 	//Inicializo el juego
-	method inicializarJuego(){
-		listaDeFiguras.add(new FiguraCuadrada())
-		figuraActiva = listaDeFiguras.head()
+	method inicializarFiguraEnJuego(){
+		figuraActiva = listaDeFiguras.anyOne()
 		figuraActiva.inicializarFigura()
-		
 	}
 	//inputs del teclado
 	method controlTeclado(){
@@ -24,10 +23,7 @@ object controller {
 	//Pregunto si la figura tiene algun tipo de colision
 	method colisionaCon(figura) = figura.bloqueFueraTabletoX(columnas) || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
 	//Pregunto si la figura colisiona con otro bloque
-	method colisionConBloque(figura) = bloquesDelTablero.any({
-		bloque => figura.colisionConBloque(bloque)			     
-	})
-	
+	method colisionConBloque(figura) = bloquesDelTablero.any({bloque => figura.colisionConBloque(bloque)})
 	//Arranca el juego
 	method start() {		
 		game.title("Tetris")
@@ -35,11 +31,18 @@ object controller {
 		game.height(filas)
 		game.cellSize(40)
 		game.ground("fondo.jpg")
-		self.inicializarJuego()	
+		self.inicializarFiguraEnJuego()	
 		self.controlTeclado()
 		const tablero1 = new Bloque(position =  new Position(x=4, y=0))
 		game.addVisual(tablero1)
-		bloquesDelTablero.add(tablero1)					
+		bloquesDelTablero.add(tablero1)
+		game.onTick(750, "gravedad", { {figuraActiva.moverAbajo()}
+			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
+				figuraActiva.moverArriba()
+				bloquesDelTablero.addAll(figuraActiva.listaBloque())
+				figuraActiva = siguienteFigura
+				self.inicializarFiguraEnJuego()
+		}})				
 		game.start()								// Inicio de juego
 	}
 }
