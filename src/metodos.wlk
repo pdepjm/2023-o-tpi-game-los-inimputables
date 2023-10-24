@@ -1,10 +1,5 @@
 import wollok.game.*
 
-object amarillo { 
-	method image() = "assets/bloque_amarillo"
-		
-	}
-
 class Bloque {
 	var property position
 	method image() = "assets/bloque_amarillo.jpg"
