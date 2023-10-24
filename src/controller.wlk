@@ -10,7 +10,7 @@ object controller {
 	
 	//Inicializo el juego
 	method inicializarFiguraEnJuego(){
-		figuraActiva = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ()].anyOne()
+		figuraActiva = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ(), new FiguraLineal(), new FiguraL()].anyOne()
 		figuraActiva.inicializarFigura()
 	} 
 	
@@ -34,13 +34,16 @@ object controller {
 		game.ground("assets/fondo.jpg")
 		self.inicializarFiguraEnJuego()	
 		self.controlTeclado()
-		const tablero1 = new Bloque(position =  new Position(x=4, y=0))
-		game.addVisual(tablero1)
-		bloquesDelTablero.add(tablero1)
+		//const tablero1 = new Bloque(position =  new Position(x=4, y=0))
+		//game.addVisual(tablero1)
+		//bloquesDelTablero.add(tablero1)
 		game.onTick(750, "gravedad",  {figuraActiva.moverAbajo()
 			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
 				figuraActiva.moverArriba()
 				bloquesDelTablero.addAll(figuraActiva.listaBloque())
+				
+				//aca iria lo de eliminar la fila cuando se complete con todos los bloques 
+				
 				self.inicializarFiguraEnJuego()
 		}})		
 		
