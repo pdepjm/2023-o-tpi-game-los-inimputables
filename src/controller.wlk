@@ -6,23 +6,11 @@ object controller {
 	const columnas = 9 
 	var property bloquesDelTablero = []
 	var property figuraActiva			// Pieza activa del juego
-	//var property listaDeFigurasPosibles = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ(), new FiguraZ()]
 	//var property siguienteFigura = listaDeFigurasPosibles.anyOne()		// Siguiente Pieza
-	
-	/*
-	method inicializarFigura(){
-		figuraActiva = listaDeFiguras.anyOne()
-		self.inicializarFiguraEnJuego(figuraActiva)
-	}
-	method inicializarFiguraEnJuego(figura){
-		figuraActiva = figura
-		figuraActiva.inicializarFigura()
-	}
-	*/
 	
 	//Inicializo el juego
 	method inicializarFiguraEnJuego(){
-		figuraActiva = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ(), new FiguraZ()].anyOne()
+		figuraActiva = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ()].anyOne()
 		figuraActiva.inicializarFigura()
 	} 
 	
