@@ -3,19 +3,29 @@ import metodos.*
 
 object controller {
 	const filas = 12
-	const columnas =9 
+	const columnas = 9 
 	var property bloquesDelTablero = []
 	var property figuraActiva			// Pieza activa del juego
-	var property listaDeFiguras = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ()]
-	var property siguienteFigura = listaDeFiguras.anyOne()		// Siguiente Pieza
+	//var property listaDeFigurasPosibles = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ(), new FiguraZ()]
+	//var property siguienteFigura = listaDeFigurasPosibles.anyOne()		// Siguiente Pieza
+	
+	/*
+	method inicializarFigura(){
+		figuraActiva = listaDeFiguras.anyOne()
+		self.inicializarFiguraEnJuego(figuraActiva)
+	}
+	method inicializarFiguraEnJuego(figura){
+		figuraActiva = figura
+		figuraActiva.inicializarFigura()
+	}
+	*/
 	
 	//Inicializo el juego
 	method inicializarFiguraEnJuego(){
-		figuraActiva = listaDeFiguras.anyOne()
+		figuraActiva = [new FiguraCuadrada(), new FiguraTe(), new FiguraZ(), new FiguraZ()].anyOne()
 		figuraActiva.inicializarFigura()
-		
-		
-	}
+	} 
+	
 	//inputs del teclado
 	method controlTeclado(){
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
@@ -43,11 +53,9 @@ object controller {
 			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
 				figuraActiva.moverArriba()
 				bloquesDelTablero.addAll(figuraActiva.listaBloque())
-				figuraActiva = siguienteFigura
 				self.inicializarFiguraEnJuego()
 		}})		
 		
-				
-		game.start()								// Inicio de juego
+		game.start()	// Inicio de juego
 	}
 }

@@ -83,10 +83,10 @@ class FiguraTe {
 	
 	//Inicializo la figura(FALTA VER HERENCIA)
 	method inicializarFigura(){
-		const bloque1 = new Bloque(position =  new Position(x=posicionX-1, y=posicionY))
-		const bloque3 = new Bloque(position = new Position(x=posicionX, y=posicionY))
-		const bloque2 = new Bloque(position = new Position(x=posicionX+1, y=posicionY))
-		const bloque4 = new Bloque(position = new Position(x=posicionX, y=posicionY+1))
+		const bloque1 = new Bloque(position =  new Position(x=posicionX-1, y=posicionY+1))
+		const bloque3 = new Bloque(position = new Position(x=posicionX, y=posicionY+1))
+		const bloque2 = new Bloque(position = new Position(x=posicionX+1, y=posicionY+1))
+		const bloque4 = new Bloque(position = new Position(x=posicionX, y=posicionY))
 		game.addVisual(bloque1)
     	game.addVisual(bloque2)
     	game.addVisual(bloque3)
@@ -151,9 +151,9 @@ class FiguraZ {
 	//Inicializo la figura(FALTA VER HERENCIA)
 	method inicializarFigura(){
 		const bloque1 = new Bloque(position =  new Position(x=posicionX-1, y=posicionY+1))
-		const bloque3 = new Bloque(position = new Position(x=posicionX, y=posicionY))
-		const bloque2 = new Bloque(position = new Position(x=posicionX+1, y=posicionY))
-		const bloque4 = new Bloque(position = new Position(x=posicionX, y=posicionY+1))
+		const bloque3 = new Bloque(position = new Position(x=posicionX, y=posicionY+1))
+		const bloque2 = new Bloque(position = new Position(x=posicionX, y=posicionY))
+		const bloque4 = new Bloque(position = new Position(x=posicionX+1, y=posicionY))
 		game.addVisual(bloque1)
     	game.addVisual(bloque2)
     	game.addVisual(bloque3)
