@@ -30,7 +30,7 @@ object controller {
 	
 	//Metodo para asignar una nueva figura a siguienteFigura
 	method asignarSiguienteFigura(){
-		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL()].anyOne()
+		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()].anyOne()
 	}
 	
 	//inputs del teclado

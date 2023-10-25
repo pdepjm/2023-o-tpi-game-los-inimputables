@@ -95,6 +95,14 @@ class FiguraZ inherits Figura{
 	}
 }
 
+class FiguraZReverse inherits Figura{
+	method inicializarFigura(){
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_rojo.jpg"),
+						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = "assets/bloque_rojo.jpg")])
+		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+	}
+}
+
 class FiguraI inherits Figura{
 	
 	method inicializarFigura(){
@@ -109,6 +117,15 @@ class FiguraL inherits Figura{
 	method inicializarFigura(){
 		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_verde.jpg"),
 							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = "assets/bloque_verde.jpg")])
+		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+	}
+	
+	}
+class FiguraLReverse inherits Figura{
+	
+	method inicializarFigura(){
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_verde.jpg"),
+							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = "assets/bloque_verde.jpg")])
 		listaBloque.forEach({bloque =>game.addVisual(bloque)})
 	}
 }
