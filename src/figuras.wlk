@@ -65,6 +65,17 @@ class Figura{
 	    })
 	}
 	
+	method rotar90GradosContraReloj(){
+		var centroX = listaBloque.get(0).position().x()
+	    var centroY = listaBloque.get(0).position().y()
+	    listaBloque.forEach({ bloque =>
+	        var x = bloque.position().x()
+	        var y = bloque.position().y()
+	        bloque.position(new Position(x = centroX + (y - centroY), y = centroY - (x - centroX)))
+	    })
+		
+	}
+	
 }
 
 
@@ -97,8 +108,8 @@ class FiguraZ inherits Figura{
 
 class FiguraZReverse inherits Figura{
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_rojo.jpg"),
-						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = "assets/bloque_rojo.jpg")])
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_violeta.png"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_violeta.png"),
+						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = "assets/bloque_violeta.png"), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = "assets/bloque_violeta.png")])
 		listaBloque.forEach({bloque =>game.addVisual(bloque)})
 	}
 }
@@ -124,8 +135,8 @@ class FiguraL inherits Figura{
 class FiguraLReverse inherits Figura{
 	
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_verde.jpg"),
-							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = "assets/bloque_verde.jpg")])
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_naranja.png"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_naranja.png"),
+							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_naranja.png"), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = "assets/bloque_naranja.png")])
 		listaBloque.forEach({bloque =>game.addVisual(bloque)})
 	}
 }

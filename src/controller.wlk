@@ -7,7 +7,7 @@ object controller {
 	const columnas =9 
 	var property bloquesDelTablero = []
 	var property figuraActiva			// Pieza activa del juego
-	const listaDeFiguras = [ new FiguraL()]
+	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
 	var property siguienteFigura		// Siguiente Pieza
 	//FILAS
 	method construccionDeFilas(){
@@ -38,7 +38,8 @@ object controller {
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
 		keyboard.left().onPressDo({figuraActiva.moverIzquierda()if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
 		keyboard.right().onPressDo({figuraActiva.moverDerecha()if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
-		keyboard.space().onPressDo({figuraActiva.rotar90Grados()if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})
+		keyboard.space().onPressDo({figuraActiva.rotar90Grados()if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90GradosContraReloj()}})
+		keyboard.up().onPressDo({figuraActiva.rotar90GradosContraReloj()if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
 		}
 	//Pregunto si la figura tiene algun tipo de colision
 	method colisionaCon(figura) = figura.bloqueFueraTabletoX(columnas) || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
