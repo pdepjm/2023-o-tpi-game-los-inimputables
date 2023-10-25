@@ -38,7 +38,7 @@ object controller {
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
 		keyboard.left().onPressDo({figuraActiva.moverIzquierda()if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
 		keyboard.right().onPressDo({figuraActiva.moverDerecha()if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
-		keyboard.space().onPressDo{figuraActiva.rotar90Grados()}
+		keyboard.space().onPressDo({figuraActiva.rotar90Grados()if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})
 		}
 	//Pregunto si la figura tiene algun tipo de colision
 	method colisionaCon(figura) = figura.bloqueFueraTabletoX(columnas) || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
