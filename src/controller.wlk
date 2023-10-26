@@ -1,10 +1,11 @@
 import wollok.game.*
 import figuras.*
 //Tablero-Controlador -> Controla todo lo que pasa en el juego
-object controller {
-	const filas = 12
+
+object controller{
+	const filas = 15
 	const listaDeFilas = []
-	const columnas =9 
+	const columnas = 9 
 	var property bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
 	var property figuraActiva			// Pieza activa del juego
 	var property perder = false
@@ -18,29 +19,27 @@ object controller {
 	method inicializarJuego(){
 		self.construccionDeFilas()
 		figuraActiva = listaDeFiguras.anyOne()
-		self.asignarSiguienteFigura()
 		figuraActiva.inicializarFigura()	
+		self.asignarSiguienteFigura()
 	}
-	
 	//cuando FiguraActica coliciona se asigna una nueva figura a: figuraActiva y siguienteFigura
 	method asignarNuevaFiguraActiva(){
 		figuraActiva = siguienteFigura
-		self.asignarSiguienteFigura()
 		figuraActiva.inicializarFigura()
+		self.asignarSiguienteFigura()
 	}
-	
 	//Metodo para asignar una nueva figura a siguienteFigura
 	method asignarSiguienteFigura(){
 		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()].anyOne()
 	}
-	
 	//inputs del teclado
 	method controlTeclado(){
+		var n = 0
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
-		keyboard.left().onPressDo({figuraActiva.moverIzquierda()if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
-		keyboard.right().onPressDo({figuraActiva.moverDerecha()if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
-		keyboard.space().onPressDo({figuraActiva.rotar90Grados()if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90GradosContraReloj()}})
-		keyboard.up().onPressDo({figuraActiva.rotar90GradosContraReloj()if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
+		keyboard.left().onPressDo({figuraActiva.moverIzquierda() if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
+		keyboard.right().onPressDo({figuraActiva.moverDerecha() if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
+		keyboard.d().onPressDo({figuraActiva.rotar90Grados() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90GradosContraReloj()}})
+		keyboard.i().onPressDo({figuraActiva.rotar90GradosContraReloj() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
 		}
 	//Pregunto si la figura tiene algun tipo de colision
 	method colisionaCon(figura) = figura.bloqueFueraTabletoX(columnas) || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
@@ -49,10 +48,10 @@ object controller {
 	method buscarLineasCompletas() {
 		var lineas = 0
 		listaDeFilas.forEach({
-			fila => if(self.bloquesDeUnaFila(fila)!= null && self.CantDeBloquesEnFila(fila) == columnas) {
-				lineas++
-				self.gestionarBorradoDeFila(fila)				
-			}
+			fila => if(self.bloquesDeUnaFila(fila) != null && self.CantDeBloquesEnFila(fila) == columnas) {
+						lineas++
+						self.gestionarBorradoDeFila(fila)				
+					}
 		})
 		return lineas
 	}
@@ -73,42 +72,42 @@ object controller {
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() > fila) {
 			bloque.position(new Position(x = bloque.position().x(), y = bloque.position().y() - 1))}})
 	}
-	
-	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() > 12})
-
-	method verificarPerder() {
-			if(self.hayUnaFiguraSobresalida()) {
-			perder = true
-			game.removeTickEvent("gravedad")
-		}
-	}
-	
+	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() >= filas - 1})
+	method perder() = self.hayUnaFiguraSobresalida()
 	//Arranca el juego
-	method start() {		
+	method arrancarJuego(){
+		var n = 0
 		game.title("Tetris")
 		game.width(columnas)
 		game.height(filas)
 		game.cellSize(40)
 		game.ground("assets/fondo.jpg")
-		self.inicializarJuego()	
+		game.addVisual(menuPresentacion)
+		keyboard.space().onPressDo({ 
+			if(n == 0){
+				game.removeVisual(menuPresentacion)
+				self.empezarJuego()
+			}
+			n++
+		})
+		game.start()
+	}
+	method empezarJuego(){
+		self.inicializarJuego()
 		self.controlTeclado()
 		game.onTick(750, "gravedad",{
-
-				if (!perder){
-					figuraActiva.moverAbajo()
-					self.buscarLineasCompletas()
-					if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
-					figuraActiva.moverArriba()
-					bloquesDelTablero.addAll(figuraActiva.listaBloque())
-					self.asignarNuevaFiguraActiva()
-				}
-				//Perder
-				self.verificarPerder()
-				}
-
-		
+			figuraActiva.moverAbajo()
+			self.buscarLineasCompletas()
+			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
+				figuraActiva.moverArriba()
+				bloquesDelTablero.addAll(figuraActiva.listaBloque())
+				self.asignarNuevaFiguraActiva()
+			}
+			//perder
+			if(self.perder()) {
+				game.stop()
+			}
 		})		
-				
-		game.start()								// Inicio de juego
-	}
+	}							
 }
+
