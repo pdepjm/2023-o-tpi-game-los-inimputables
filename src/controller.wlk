@@ -5,8 +5,9 @@ object controller {
 	const filas = 12
 	const listaDeFilas = []
 	const columnas =9 
-	var property bloquesDelTablero = []
+	var property bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
 	var property figuraActiva			// Pieza activa del juego
+	var property perder = false
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
 	var property siguienteFigura		// Siguiente Pieza
 	//FILAS
@@ -72,6 +73,16 @@ object controller {
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() > fila) {
 			bloque.position(new Position(x = bloque.position().x(), y = bloque.position().y() - 1))}})
 	}
+	
+	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() > 12})
+
+	method verificarPerder() {
+			if(self.hayUnaFiguraSobresalida()) {
+			perder = true
+			game.removeTickEvent("gravedad")
+		}
+	}
+	
 	//Arranca el juego
 	method start() {		
 		game.title("Tetris")
@@ -82,15 +93,21 @@ object controller {
 		self.inicializarJuego()	
 		self.controlTeclado()
 		game.onTick(750, "gravedad",{
-			figuraActiva.moverAbajo()
-			self.buscarLineasCompletas()
-			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
-				figuraActiva.moverArriba()
-				bloquesDelTablero.addAll(figuraActiva.listaBloque())
-				self.asignarNuevaFiguraActiva()
-				
-		}})		
+
+				if (!perder){
+					figuraActiva.moverAbajo()
+					self.buscarLineasCompletas()
+					if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
+					figuraActiva.moverArriba()
+					bloquesDelTablero.addAll(figuraActiva.listaBloque())
+					self.asignarNuevaFiguraActiva()
+				}
+				//Perder
+				self.verificarPerder()
+				}
+
 		
+		})		
 				
 		game.start()								// Inicio de juego
 	}

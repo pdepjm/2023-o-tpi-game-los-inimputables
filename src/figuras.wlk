@@ -25,6 +25,7 @@ class Figura{
  	
  	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
  	method bloqueFueraTabletoY() = listaBloque.any({bloque => bloque.position().y() < 0})
+ 	
 	
 	//Pregunto si el bloque colisiona con otro bloque
 	method colisionConBloque(bloquesDelTablero) =  listaBloque.any({bloque => bloque.position().y() == bloquesDelTablero.position().y() && bloque.position().x() == bloquesDelTablero.position().x()})
