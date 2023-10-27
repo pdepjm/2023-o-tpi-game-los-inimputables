@@ -1,9 +1,12 @@
 import wollok.game.*
 //Todas las figuras del juego
 
-object menuPresentacion {
-	var property position = new Position(x = 2, y = 4)
-	method image() = "assets/imagen_presentacion.jpg"
+class MenuFinal_MenuInicial {
+	var property image
+	var property position = new Position(x = 0, y = 0)
+}
+object menuInicial inherits MenuFinal_MenuInicial(image = "assets/imagen_presentacion.jpg"){}
+object menuFinal inherits MenuFinal_MenuInicial(image = "assets/imagen_fin_juego.jpg"){
 }
 class Bloque {
 	var property image

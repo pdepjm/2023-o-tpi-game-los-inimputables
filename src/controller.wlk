@@ -6,11 +6,12 @@ object controller{
 	const filas = 15
 	const listaDeFilas = []
 	const columnas = 9 
-	var property bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
-	var property figuraActiva			// Pieza activa del juego
-	var property perder = false
+	const bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
+	var figuraActiva			// Pieza activa del juego
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
-	var property siguienteFigura		// Siguiente Pieza
+	var siguienteFigura		// Siguiente Pieza
+	var property puntaje = 0
+	var highScore = 0
 	//FILAS
 	method construccionDeFilas(){
 		(0..filas).forEach({fila => listaDeFilas.add(fila)})
@@ -34,7 +35,6 @@ object controller{
 	}
 	//inputs del teclado
 	method controlTeclado(){
-		var n = 0
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
 		keyboard.left().onPressDo({figuraActiva.moverIzquierda() if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
 		keyboard.right().onPressDo({figuraActiva.moverDerecha() if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
@@ -67,10 +67,13 @@ object controller{
 	method borrarFila(fila){
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() == fila)game.removeVisual(bloque)})
 		bloquesDelTablero.removeAll(self.bloquesDeUnaFila(fila))
+		puntaje += 100
 	}
 	method moverBloquesHaciaAbajo(fila){
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() > fila) {
-			bloque.position(new Position(x = bloque.position().x(), y = bloque.position().y() - 1))}})
+											 	bloque.position(new Position(x = bloque.position().x(), y = bloque.position().y() - 1))
+											 }
+								  })
 	}
 	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() >= filas - 1})
 	method perder() = self.hayUnaFiguraSobresalida()
@@ -82,10 +85,11 @@ object controller{
 		game.height(filas)
 		game.cellSize(40)
 		game.ground("assets/fondo.jpg")
-		game.addVisual(menuPresentacion)
+		self.controlTeclado()
+		game.addVisual(menuInicial)
 		keyboard.space().onPressDo({ 
 			if(n == 0){
-				game.removeVisual(menuPresentacion)
+				game.removeVisual(menuInicial)
 				self.empezarJuego()
 			}
 			n++
@@ -94,8 +98,7 @@ object controller{
 	}
 	method empezarJuego(){
 		self.inicializarJuego()
-		self.controlTeclado()
-		game.onTick(750, "gravedad",{
+		game.onTick(500, "gravedad",{
 			figuraActiva.moverAbajo()
 			self.buscarLineasCompletas()
 			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
@@ -104,10 +107,28 @@ object controller{
 				self.asignarNuevaFiguraActiva()
 			}
 			//perder
-			if(self.perder()) {
-				game.stop()
+			if(self.perder()){
+				var t = 0
+				game.removeTickEvent("gravedad")
+				game.addVisual(menuFinal)
+				keyboard.space().onPressDo({ 
+					if(t == 0){
+						game.removeVisual(menuFinal)
+						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
+						bloquesDelTablero.clear()
+						self.empezarJuego()
+						t++
+						if(puntaje > highScore){highScore = puntaje}
+					}
+				})
+				keyboard.x().onPressDo({
+					if(t == 0){
+						game.stop()
+					}
+				})									   
 			}
-		})		
-	}							
-}
+		})
+	}
+}								
+
 
