@@ -3,9 +3,7 @@ import figuras.*
 //Tablero-Controlador -> Controla todo lo que pasa en el juego
 
 object controller{
-	const filas = 15
 	const listaDeFilas = []
-	const columnas = 9 
 	const bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
 	var figuraActiva			// Pieza activa del juego
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
@@ -14,7 +12,7 @@ object controller{
 	var highScore = 0
 	//FILAS
 	method construccionDeFilas(){
-		(0..filas).forEach({fila => listaDeFilas.add(fila)})
+		(0..15).forEach({fila => listaDeFilas.add(fila)})
 	}
 	//Inicializo el juego
 	method inicializarJuego(){
@@ -42,13 +40,13 @@ object controller{
 		keyboard.i().onPressDo({figuraActiva.rotar90GradosContraReloj() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
 		}
 	//Pregunto si la figura tiene algun tipo de colision
-	method colisionaCon(figura) = figura.bloqueFueraTabletoX(columnas) || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
+	method colisionaCon(figura) = figura.bloqueFueraTabletoX() || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
 	//Pregunto si la figura colisiona con otro bloque
 	method colisionConBloque(figura) = bloquesDelTablero.any({bloque => figura.colisionConBloque(bloque)})
 	method buscarLineasCompletas() {
 		var lineas = 0
 		listaDeFilas.forEach({
-			fila => if(self.bloquesDeUnaFila(fila) != null && self.CantDeBloquesEnFila(fila) == columnas) {
+			fila => if(self.bloquesDeUnaFila(fila) != null && self.CantDeBloquesEnFila(fila) == 9) {
 						lineas++
 						self.gestionarBorradoDeFila(fila)				
 					}
@@ -75,16 +73,16 @@ object controller{
 											 }
 								  })
 	}
-	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() >= filas - 1})
+	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() >= 14})
 	method perder() = self.hayUnaFiguraSobresalida()
 	//Arranca el juego
 	method arrancarJuego(){
 		var n = 0
 		game.title("Tetris")
-		game.width(columnas)
-		game.height(filas)
+		game.width(14)
+		game.height(15)
 		game.cellSize(40)
-		game.ground("assets/fondo.jpg")
+		game.boardGround("assets/tablero.jpg")
 		self.controlTeclado()
 		game.addVisual(menuInicial)
 		keyboard.space().onPressDo({ 
@@ -98,7 +96,9 @@ object controller{
 	}
 	method empezarJuego(){
 		self.inicializarJuego()
+		game.addVisual(textoPuntos)
 		game.onTick(500, "gravedad",{
+			textoPuntos.cambiarPuntaje(puntaje)
 			figuraActiva.moverAbajo()
 			self.buscarLineasCompletas()
 			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
@@ -111,8 +111,11 @@ object controller{
 				var t = 0
 				game.removeTickEvent("gravedad")
 				game.addVisual(menuFinal)
+				game.addVisual(bloqueTemporal)
+				bloqueTemporal.finDelJuego(puntaje, highScore)
 				keyboard.space().onPressDo({ 
 					if(t == 0){
+						game.removeVisual(bloqueTemporal)
 						game.removeVisual(menuFinal)
 						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
 						bloquesDelTablero.clear()

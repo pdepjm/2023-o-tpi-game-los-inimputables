@@ -1,13 +1,25 @@
 import wollok.game.*
 //Todas las figuras del juego
 
+object siguienteFigura{
+	
+}
+object textoPuntos{
+	var property position = new Position(x = 11, y = 12)
+	var text = "puntaje: 0"
+	method text() = text
+	method cambiarPuntaje(puntaje){
+		if(puntaje > 0){
+			text = "puntos: " + puntaje
+		}
+	}
+}
 class MenuFinal_MenuInicial {
 	var property image
 	var property position = new Position(x = 0, y = 0)
 }
 object menuInicial inherits MenuFinal_MenuInicial(image = "assets/imagen_presentacion.jpg"){}
-object menuFinal inherits MenuFinal_MenuInicial(image = "assets/imagen_fin_juego.jpg"){
-}
+object menuFinal inherits MenuFinal_MenuInicial(image = "assets/imagen_fin_juego.jpg"){}
 class Bloque {
 	var property image
 	var property position
@@ -27,7 +39,7 @@ class Figura{
 	 */
 
 	//Pregunto si el bloque esta fuera del tablero con respecto al eje X
-	method bloqueFueraTabletoX(columnas) = listaBloque.any({bloque => bloque.position().x() > columnas - 1 || bloque.position().x() < 0} )
+	method bloqueFueraTabletoX() = listaBloque.any({bloque => bloque.position().x() > 8 || bloque.position().x() < 0} )
  	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
  	method bloqueFueraTabletoY() = listaBloque.any({bloque => bloque.position().y() < 0})
 	//Pregunto si el bloque colisiona con otro bloque
