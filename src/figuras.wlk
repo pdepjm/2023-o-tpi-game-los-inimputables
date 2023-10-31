@@ -1,8 +1,11 @@
 import wollok.game.*
 //Todas las figuras del juego
 
-object siguienteFigura{
-	
+object figuraSiguiente{
+	var property position = new Position(x = 11, y = 4)
+	method siguienteImagen(siguienteFigura){
+		game.addVisual(siguienteFigura)
+	}
 }
 object textoPuntos{
 	var property position = new Position(x = 11, y = 12)

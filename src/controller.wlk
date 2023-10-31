@@ -106,16 +106,14 @@ object controller{
 				bloquesDelTablero.addAll(figuraActiva.listaBloque())
 				self.asignarNuevaFiguraActiva()
 			}
+			figuraSiguiente.siguienteImagen(siguienteFigura)
 			//perder
 			if(self.perder()){
 				var t = 0
 				game.removeTickEvent("gravedad")
 				game.addVisual(menuFinal)
-				game.addVisual(bloqueTemporal)
-				bloqueTemporal.finDelJuego(puntaje, highScore)
 				keyboard.space().onPressDo({ 
 					if(t == 0){
-						game.removeVisual(bloqueTemporal)
 						game.removeVisual(menuFinal)
 						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
 						bloquesDelTablero.clear()
