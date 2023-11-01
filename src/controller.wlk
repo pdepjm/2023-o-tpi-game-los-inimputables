@@ -45,7 +45,7 @@ object controller{
 		keyboard.left().onPressDo({figuraActiva.moverIzquierda() if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})	
 		keyboard.right().onPressDo({figuraActiva.moverDerecha() if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
 		keyboard.d().onPressDo({figuraActiva.rotar90Grados() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90GradosContraReloj()}})
-		keyboard.i().onPressDo({figuraActiva.rotar90GradosContraReloj() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
+		keyboard.a().onPressDo({figuraActiva.rotar90GradosContraReloj() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
 		}
 	//Pregunto si la figura tiene algun tipo de colision
 	method colisionaCon(figura) = figura.bloqueFueraTabletoX() || figura.bloqueFueraTabletoY() || self.colisionConBloque(figura)
@@ -125,11 +125,16 @@ object controller{
 				game.addVisual(textoFinJuego2)
 				textoFinJuego2.text(highScore)
 				game.addVisual(textoFinJuego3)
+				
 				keyboard.space().onPressDo({ 
 					if(t == 0){
 						game.removeVisual(menuFinal)
 						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
 						bloquesDelTablero.clear()
+						//self.asignarSiguienteFigura()
+						game.removeVisual(textoPuntos)
+						game.removeVisual(textoSiguienteFigura)
+						
 						self.empezarJuego()
 						t++
 						if(puntaje > highScore){highScore = puntaje}
