@@ -1,12 +1,28 @@
 import wollok.game.*
 //Todas las figuras del juego
 
+object textoFinJuego3{
+	var property position = new Position(x = 5, y = 1)
+	method text() = "PRESIONE ESPACIO PARA REINICIAR O X PARA SALIR"
+}
+object textoFinJuego2{
+	var property position = new Position(x = 5, y = 2)
+	method text(highScore) = "EL HIGHSCORE ES DE: " + highScore
+}
+object textoFinJuego{
+	var property position = new Position(x = 5, y = 3)
+	method text(puntos) = "TUS PUNTOS FUERON DE: " + puntos
+}
+object textoSiguienteFigura{
+	var property position = new Position(x = 11, y = 7)
+	method text() = "SIGUIENTE FIGURA: "
+}
 object textoPuntos{
 	var property position = new Position(x = 11, y = 12)
-	var text = "puntaje: "
+	var text = "PUNTOS: "
 	method text() = text
 	method cambiarPuntaje(puntaje){
-			text = "puntos: " + puntaje
+			text = "PUNTOS: " + puntaje
 	}
 }
 class MenuFinal_MenuInicial {
@@ -27,13 +43,6 @@ class Figura{
 	var property enUso = false
 	var property visual = true
 	
-	// matriz 4 x 4 ==> matriz rotada 90 grados a la derecha
-	/*
-	 [ 1,  2,  3,  4] ==> [13,  9, 5, 1]
-	 [ 5,  6,  7,  8] ==> [14, 10, 6, 2]
-	 [ 9, 10, 11, 12] ==> [15, 11, 7, 3]
-	 [13, 14, 15, 16] ==> [16, 12, 8, 4]
-	 */
 	 method borrarVisual() {
 		listaBloque.forEach({bloque => game.removeVisual(bloque)})
 		listaBloque.clear()
@@ -123,7 +132,7 @@ class FiguraZ inherits Figura{
 	}
 }
 class FiguraZReverse inherits Figura{
-	const bloqueVioleta = "assets/bloque_violeta.png"
+	const bloqueVioleta = "assets/bloque_gris.jpg"
 	method inicializarFigura(){
 		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueVioleta), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueVioleta),
 						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = bloqueVioleta), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = bloqueVioleta)])
