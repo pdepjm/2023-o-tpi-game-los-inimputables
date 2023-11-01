@@ -20,7 +20,7 @@ object controller{
 		figuraActiva = listaDeFiguras.anyOne()
 		self.asignarSiguienteFigura()
 		figuraActiva.inicializarFigura()
-		siguienteFigura.cambiarPosicion(11,3)
+		siguienteFigura.cambiarPosicion(11,4)
 		siguienteFigura.inicializarFigura()
 		
 			
@@ -32,7 +32,7 @@ object controller{
 		figuraActiva = siguienteFigura
 		figuraActiva.inicializarFigura()
 		self.asignarSiguienteFigura()
-		siguienteFigura.cambiarPosicion(11,3)
+		siguienteFigura.cambiarPosicion(11,4)
 		siguienteFigura.inicializarFigura()
 	}
 	method asignarSiguienteFigura(){
@@ -105,7 +105,6 @@ object controller{
 	method empezarJuego(){
 		self.inicializarJuego()
 		game.addVisual(textoPuntos)
-		game.addVisual(textoSiguienteFigura)
 		game.onTick(500, "gravedad",{
 			textoPuntos.cambiarPuntaje(puntaje.toString())
 			figuraActiva.moverAbajo()
@@ -120,24 +119,21 @@ object controller{
 				var t = 0
 				game.removeTickEvent("gravedad")
 				game.addVisual(menuFinal)
-				game.addVisual(textoFinJuego)
-				textoFinJuego.text(puntaje)
-				game.addVisual(textoFinJuego2)
-				textoFinJuego2.text(highScore)
-				game.addVisual(textoFinJuego3)
-				
+				game.removeVisual(textoPuntos)
+				textoPuntos.position(new Position(x = 6, y = 8))
+				game.addVisual(textoPuntos)
+				//textoHighscore.text(highScore)
+				siguienteFigura.borrarVisual()
+				figuraActiva.borrarVisual()				
 				keyboard.space().onPressDo({ 
 					if(t == 0){
 						game.removeVisual(menuFinal)
 						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
 						bloquesDelTablero.clear()
-						//self.asignarSiguienteFigura()
 						game.removeVisual(textoPuntos)
-						game.removeVisual(textoSiguienteFigura)
-						
-						self.empezarJuego()
 						t++
 						if(puntaje > highScore){highScore = puntaje}
+						self.empezarJuego()
 					}
 				})
 				keyboard.x().onPressDo({

@@ -1,28 +1,20 @@
 import wollok.game.*
 //Todas las figuras del juego
 
-object textoFinJuego3{
-	var property position = new Position(x = 5, y = 1)
-	method text() = "PRESIONE ESPACIO PARA REINICIAR O X PARA SALIR"
-}
-object textoFinJuego2{
+
+object textoHighscore{
 	var property position = new Position(x = 5, y = 2)
-	method text(highScore) = "EL HIGHSCORE ES DE: " + highScore
+	method text(highScore) =  highScore
 }
-object textoFinJuego{
-	var property position = new Position(x = 5, y = 3)
-	method text(puntos) = "TUS PUNTOS FUERON DE: " + puntos
-}
-object textoSiguienteFigura{
-	var property position = new Position(x = 11, y = 7)
-	method text() = "SIGUIENTE FIGURA: "
-}
+
+
 object textoPuntos{
-	var property position = new Position(x = 11, y = 12)
-	var text = "PUNTOS: "
+	var property position = new Position(x = 11, y = 0)
+	var text = ""
 	method text() = text
+	method textColor() = "FFFFFFF"
 	method cambiarPuntaje(puntaje){
-			text = "PUNTOS: " + puntaje
+			text = puntaje
 	}
 }
 class MenuFinal_MenuInicial {
