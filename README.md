@@ -1,10 +1,11 @@
-# Nombre del juego (<- borrar y completar)
+# TETRIS
 
 ## Equipo de desarrollo
-
-- Alguien
-- Persona
-- etc.
+- Rodrigo	Acuña
+- Ezequiel Arroyo
+- Agustin Alejandro Calderón Rodriguez
+- Hugo Franco Nahuel Flores Galindo		
+- Camilo	Ponce
 
 ## Capturas
 
@@ -12,7 +13,15 @@
 
 ## Reglas de Juego / Instrucciones
 
-(Escribirlas)
+1)Bloques: En Tetris, se utilizan siete formas diferentes de bloques compuestas por cuatro cuadrados cada uno, llamados "tetrominós". Estas formas son: I, J, L, O, S, T y Z.
+
+2)Caída de bloques: Los bloques caen desde la parte superior de la pantalla hacia abajo. Puedes moverlos hacia la izquierda o la derecha a medida que caen y también puedes hacerlos rotar.
+
+3)Completar filas: El objetivo principal es completar filas horizontales con bloques para eliminarlas. Cuando una fila se llena por completo, desaparece y obtienes puntos.
+
+4)Game Over: El juego termina cuando los bloques alcanzan la parte superior de la pantalla y no hay espacio para que aparezcan más bloques.
+
+5)Puntuación: Ganas puntos al eliminar filas.
 
 
 ## Otros
