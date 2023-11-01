@@ -96,6 +96,10 @@ object controller{
 		keyboard.space().onPressDo({ 
 			if(n == 0){
 				game.removeVisual(menuInicial)
+				game.addVisual(textoPuntos)
+				const musiquita = game.sound("musiquita_tetri.mp3")
+    			musiquita.shouldLoop(true)
+    			game.schedule(1, { musiquita.play()} )
 				self.empezarJuego()
 			}
 			n++
@@ -104,7 +108,6 @@ object controller{
 	}
 	method empezarJuego(){
 		self.inicializarJuego()
-		game.addVisual(textoPuntos)
 		game.onTick(500, "gravedad",{
 			textoPuntos.cambiarPuntaje(puntaje.toString())
 			figuraActiva.moverAbajo()
@@ -119,10 +122,11 @@ object controller{
 				var t = 0
 				game.removeTickEvent("gravedad")
 				game.addVisual(menuFinal)
-				game.removeVisual(textoPuntos)
 				textoPuntos.position(new Position(x = 6, y = 8))
+				game.removeVisual(textoPuntos)
 				game.addVisual(textoPuntos)
-				//textoHighscore.text(highScore)
+				textoHighscore.cambiarPuntaje(([puntaje, highScore].max()).toString())
+				game.addVisual(textoHighscore)
 				siguienteFigura.borrarVisual()
 				figuraActiva.borrarVisual()				
 				keyboard.space().onPressDo({ 
@@ -130,9 +134,11 @@ object controller{
 						game.removeVisual(menuFinal)
 						bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
 						bloquesDelTablero.clear()
-						game.removeVisual(textoPuntos)
+						textoPuntos.position(new Position(x = 11, y = 0))
+						highScore = [puntaje, highScore].max()
+						game.removeVisual(textoHighscore)
+						puntaje = 0
 						t++
-						if(puntaje > highScore){highScore = puntaje}
 						self.empezarJuego()
 					}
 				})

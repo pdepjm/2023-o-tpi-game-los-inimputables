@@ -2,14 +2,8 @@ import wollok.game.*
 //Todas las figuras del juego
 
 
-object textoHighscore{
-	var property position = new Position(x = 5, y = 2)
-	method text(highScore) =  highScore
-}
-
-
-object textoPuntos{
-	var property position = new Position(x = 11, y = 0)
+class Textos{
+	var property position
 	var text = ""
 	method text() = text
 	method textColor() = "FFFFFFF"
@@ -17,6 +11,8 @@ object textoPuntos{
 			text = puntaje
 	}
 }
+object textoHighscore inherits Textos(position = new Position(x = 6, y = 3)){}
+object textoPuntos inherits Textos(position = new Position(x = 11, y = 0)){}
 class MenuFinal_MenuInicial {
 	var property image
 	var property position = new Position(x = 0, y = 0)
@@ -51,7 +47,6 @@ class Figura{
 	method colisionConBloque(bloqueDelTablero) =  listaBloque.any({bloque => bloque.position().y() == bloqueDelTablero.position().y() && bloque.position().x() == bloqueDelTablero.position().x()})
 	// Mover izquierda
 	method moverIzquierda(){
-		posicionX--
 		listaBloque.forEach({		
 			bloque => bloque.position(new Position(x = bloque.position().x() - 1, y = bloque.position().y() ))
 		})
@@ -97,9 +92,11 @@ class Figura{
 	}	
 }
 
-
+//como no tiene sentido que el cuadrado rote, decidimos que 
 class FiguraCuadrada inherits Figura{
 	const bloqueAmarillo = "assets/bloque_amarillo.jpg"
+	override method rotar90Grados(){}
+	override method rotar90GradosContraReloj(){}
 	method inicializarFigura(){
 		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueAmarillo), new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = bloqueAmarillo),
 						    new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueAmarillo), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = bloqueAmarillo)])
