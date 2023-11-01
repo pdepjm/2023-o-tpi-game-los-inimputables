@@ -156,10 +156,11 @@ class FiguraL inherits Figura{
 	}
 }
 class FiguraLReverse inherits Figura{
-	const bloqueNaranja = "assets/bloque_naranja.png"
+	const bloqueNaranja = "assets/bloque_naranja.jpg"
 	method inicializarFigura(){
 		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueNaranja),
 							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = bloqueNaranja)])
 		self.mostrarFigura()
 	}
 }
+
