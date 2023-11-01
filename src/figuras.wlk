@@ -1,12 +1,6 @@
 import wollok.game.*
 //Todas las figuras del juego
 
-object figuraSiguiente{
-	var property position = new Position(x = 11, y = 4)
-	method siguienteImagen(siguienteFigura){
-		game.addVisual(siguienteFigura)
-	}
-}
 object textoPuntos{
 	var property position = new Position(x = 11, y = 12)
 	var text = "puntaje: 0"
@@ -90,56 +84,73 @@ class Figura{
 	        bloque.position(new Position(x = centroX + (y - centroY), y = centroY - (x - centroX)))
 	    })
 	}
+	method mostrarFigura(){
+		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+	}	
 }
 
 
 class FiguraCuadrada inherits Figura{
+	const bloqueAmarillo = "assets/bloque_amarillo.jpg"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_amarillo.jpg"), new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = "assets/bloque_amarillo.jpg"),
-						    new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_amarillo.jpg"), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = "assets/bloque_amarillo.jpg")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueAmarillo), new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = bloqueAmarillo),
+						    new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueAmarillo), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = bloqueAmarillo)])
+		self.mostrarFigura()
 	}
 }
 class FiguraT inherits Figura{
+	const bloqueAzul = "assets/bloque_azul.jpg"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_azul.jpg"), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = "assets/bloque_azul.jpg"), 
-							new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = "assets/bloque_azul.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_azul.jpg")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueAzul), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = bloqueAzul), 
+							new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = bloqueAzul), new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueAzul)])
+		self.mostrarFigura()
 	}
 }
 
 class FiguraZ inherits Figura{
+	const bloqueRojo = "assets/bloque_rojo.jpg"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_rojo.jpg"),
-						    new Bloque(position = new Position(x=posicionX-1, y=posicionY+1), image = "assets/bloque_rojo.jpg"), new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = "assets/bloque_rojo.jpg")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueRojo), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueRojo),
+						    new Bloque(position = new Position(x=posicionX-1, y=posicionY+1), image = bloqueRojo), new Bloque(position = new Position(x=posicionX+1, y=posicionY), image = bloqueRojo)])
+		self.mostrarFigura()
 	}
 }
 class FiguraZReverse inherits Figura{
+	const bloqueVioleta = "assets/bloque_violeta.png"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_violeta.png"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_violeta.png"),
-						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = "assets/bloque_violeta.png"), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = "assets/bloque_violeta.png")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueVioleta), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueVioleta),
+						    new Bloque(position = new Position(x=posicionX+1, y=posicionY+1), image = bloqueVioleta), new Bloque(position = new Position(x=posicionX-1, y=posicionY), image = bloqueVioleta)])
+		self.mostrarFigura()
 	}
 }
 class FiguraI inherits Figura{
+	const bloqueRosa = "assets/bloque_rosa.jpg"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_rosa.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_rosa.jpg"),
-							new Bloque(position = new Position(x=posicionX, y=posicionY+2), image = "assets/bloque_rosa.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+3), image = "assets/bloque_rosa.jpg")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})	
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueRosa), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueRosa),
+							new Bloque(position = new Position(x=posicionX, y=posicionY+2), image = bloqueRosa), new Bloque(position = new Position(x=posicionX, y=posicionY+3), image = bloqueRosa)])
+		self.mostrarFigura()	
 	}
 }
 class FiguraL inherits Figura{
+	const bloqueVerde = "assets/bloque_verde.jpg"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_verde.jpg"),
-							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_verde.jpg"), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = "assets/bloque_verde.jpg")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueVerde), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueVerde),
+							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueVerde), new Bloque(position = new Position(x=posicionX+1, y=posicionY-1), image = bloqueVerde)])
+		self.mostrarFigura()
 	}
 }
 class FiguraLReverse inherits Figura{
+	const bloqueNaranja = "assets/bloque_naranja.png"
 	method inicializarFigura(){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = "assets/bloque_naranja.png"), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = "assets/bloque_naranja.png"),
-							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = "assets/bloque_naranja.png"), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = "assets/bloque_naranja.png")])
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
+		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueNaranja),
+							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = bloqueNaranja)])
+		self.mostrarFigura()
+	}
+}
+class SiguienteFigura{
+	var property posicionX = 12
+	var property posicionY = 7
+	method inicializarSiguienteFigura(lista){
+		lista.forEach({bloque =>game.addVisual(bloque)})
 	}
 }

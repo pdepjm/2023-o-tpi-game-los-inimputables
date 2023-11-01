@@ -8,6 +8,7 @@ object controller{
 	var figuraActiva			// Pieza activa del juego
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
 	var siguienteFigura		// Siguiente Pieza
+	var modeloSiguienteFigura = new SiguienteFigura()
 	var property puntaje = 0
 	var highScore = 0
 	//FILAS
@@ -30,6 +31,8 @@ object controller{
 	//Metodo para asignar una nueva figura a siguienteFigura
 	method asignarSiguienteFigura(){
 		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()].anyOne()
+		modeloSiguienteFigura = siguienteFigura
+		modeloSiguienteFigura.inicializarSiguienteFigura(modeloSiguienteFigura.listaBloque())
 	}
 	//inputs del teclado
 	method controlTeclado(){
@@ -106,7 +109,6 @@ object controller{
 				bloquesDelTablero.addAll(figuraActiva.listaBloque())
 				self.asignarNuevaFiguraActiva()
 			}
-			figuraSiguiente.siguienteImagen(siguienteFigura)
 			//perder
 			if(self.perder()){
 				var t = 0
