@@ -3,12 +3,10 @@ import wollok.game.*
 
 object textoPuntos{
 	var property position = new Position(x = 11, y = 12)
-	var text = "puntaje: 0"
+	var text = "puntaje: "
 	method text() = text
 	method cambiarPuntaje(puntaje){
-		if(puntaje > 0){
 			text = "puntos: " + puntaje
-		}
 	}
 }
 class MenuFinal_MenuInicial {
@@ -17,6 +15,7 @@ class MenuFinal_MenuInicial {
 }
 object menuInicial inherits MenuFinal_MenuInicial(image = "assets/imagen_presentacion.jpg"){}
 object menuFinal inherits MenuFinal_MenuInicial(image = "assets/imagen_fin_juego.jpg"){}
+
 class Bloque {
 	var property image
 	var property position
@@ -26,6 +25,7 @@ class Figura{
 	var property posicionX = 4				//posicion relativa del eje X
 	var property posicionY = 16 			//posicion relativa del eje Y
 	var property enUso = false
+	var property visual = true
 	
 	// matriz 4 x 4 ==> matriz rotada 90 grados a la derecha
 	/*
@@ -34,7 +34,14 @@ class Figura{
 	 [ 9, 10, 11, 12] ==> [15, 11, 7, 3]
 	 [13, 14, 15, 16] ==> [16, 12, 8, 4]
 	 */
-
+	 method borrarVisual() {
+		listaBloque.forEach({bloque => game.removeVisual(bloque)})
+		listaBloque.clear()
+	}
+	 method cambiarPosicion(x,y) {
+		posicionX = x
+		posicionY = y
+	}
 	//Pregunto si el bloque esta fuera del tablero con respecto al eje X
 	method bloqueFueraTabletoX() = listaBloque.any({bloque => bloque.position().x() > 8 || bloque.position().x() < 0} )
  	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
@@ -145,13 +152,5 @@ class FiguraLReverse inherits Figura{
 		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX, y=posicionY+1), image = bloqueNaranja),
 							new Bloque(position = new Position(x=posicionX, y=posicionY-1), image = bloqueNaranja), new Bloque(position = new Position(x=posicionX-1, y=posicionY-1), image = bloqueNaranja)])
 		self.mostrarFigura()
-	}
-}
-class SiguienteFigura{
-	var property posicionX = 12
-	var property posicionY = 7
-	var property listaDeBloques = []
-	method inicializarSiguienteFigura(lista){
-		lista.forEach({bloque =>game.addVisual(bloque)})
 	}
 }

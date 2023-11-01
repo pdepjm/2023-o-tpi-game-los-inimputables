@@ -7,8 +7,7 @@ object controller{
 	const bloquesDelTablero = [] // new Bloque(position = new Position(x = 1, y = 13),image = "assets/bloque_amarillo.jpg")
 	var figuraActiva			// Pieza activa del juego
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
-	var siguienteFigura		// Siguiente Pieza
-	var modeloSiguienteFigura
+	var property siguienteFigura	// Siguiente Pieza
 	var property puntaje = 0
 	var highScore = 0
 	//FILAS
@@ -19,22 +18,27 @@ object controller{
 	method inicializarJuego(){
 		self.construccionDeFilas()
 		figuraActiva = listaDeFiguras.anyOne()
-		figuraActiva.inicializarFigura()	
 		self.asignarSiguienteFigura()
-		modeloSiguienteFigura.inicializarSiguienteFigura(modeloSiguienteFigura.listaDeBloques())
+		figuraActiva.inicializarFigura()
+		siguienteFigura.cambiarPosicion(11,7)
+		siguienteFigura.inicializarFigura()
+		
+			
 	}
 	//cuando FiguraActica coliciona se asigna una nueva figura a: figuraActiva y siguienteFigura
 	method asignarNuevaFiguraActiva(){
+		siguienteFigura.cambiarPosicion(4,16)
+		siguienteFigura.borrarVisual()
 		figuraActiva = siguienteFigura
 		figuraActiva.inicializarFigura()
 		self.asignarSiguienteFigura()
+		siguienteFigura.cambiarPosicion(11,7)
+		siguienteFigura.inicializarFigura()
 	}
-	//Metodo para asignar una nueva figura a siguienteFigura
 	method asignarSiguienteFigura(){
 		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()].anyOne()
-		modeloSiguienteFigura = new SiguienteFigura()
-		modeloSiguienteFigura.listaDeBloques().addAll(siguienteFigura.listaBloque())
 	}
+	//Metodo para asignar una nueva figura a siguienteFigura
 	//inputs del teclado
 	method controlTeclado(){
 		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})	
@@ -102,7 +106,7 @@ object controller{
 		self.inicializarJuego()
 		game.addVisual(textoPuntos)
 		game.onTick(500, "gravedad",{
-			textoPuntos.cambiarPuntaje(puntaje)
+			textoPuntos.cambiarPuntaje(puntaje.toString())
 			figuraActiva.moverAbajo()
 			self.buscarLineasCompletas()
 			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
