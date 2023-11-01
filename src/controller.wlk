@@ -20,7 +20,7 @@ object controller{
 		figuraActiva = listaDeFiguras.anyOne()
 		self.asignarSiguienteFigura()
 		figuraActiva.inicializarFigura()
-		siguienteFigura.cambiarPosicion(11,7)
+		siguienteFigura.cambiarPosicion(11,3)
 		siguienteFigura.inicializarFigura()
 		
 			
@@ -32,7 +32,7 @@ object controller{
 		figuraActiva = siguienteFigura
 		figuraActiva.inicializarFigura()
 		self.asignarSiguienteFigura()
-		siguienteFigura.cambiarPosicion(11,7)
+		siguienteFigura.cambiarPosicion(11,3)
 		siguienteFigura.inicializarFigura()
 	}
 	method asignarSiguienteFigura(){
@@ -105,6 +105,7 @@ object controller{
 	method empezarJuego(){
 		self.inicializarJuego()
 		game.addVisual(textoPuntos)
+		game.addVisual(textoSiguienteFigura)
 		game.onTick(500, "gravedad",{
 			textoPuntos.cambiarPuntaje(puntaje.toString())
 			figuraActiva.moverAbajo()
@@ -119,6 +120,11 @@ object controller{
 				var t = 0
 				game.removeTickEvent("gravedad")
 				game.addVisual(menuFinal)
+				game.addVisual(textoFinJuego)
+				textoFinJuego.text(puntaje)
+				game.addVisual(textoFinJuego2)
+				textoFinJuego2.text(highScore)
+				game.addVisual(textoFinJuego3)
 				keyboard.space().onPressDo({ 
 					if(t == 0){
 						game.removeVisual(menuFinal)
@@ -137,6 +143,4 @@ object controller{
 			}
 		})
 	}
-}								
-
-
+}				
