@@ -8,7 +8,7 @@ object controller{
 	var figuraActiva			// Pieza activa del juego
 	const listaDeFiguras = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()]
 	var siguienteFigura		// Siguiente Pieza
-	var modeloSiguienteFigura = new SiguienteFigura()
+	var modeloSiguienteFigura
 	var property puntaje = 0
 	var highScore = 0
 	//FILAS
@@ -21,6 +21,7 @@ object controller{
 		figuraActiva = listaDeFiguras.anyOne()
 		figuraActiva.inicializarFigura()	
 		self.asignarSiguienteFigura()
+		modeloSiguienteFigura.inicializarSiguienteFigura(modeloSiguienteFigura.listaDeBloques())
 	}
 	//cuando FiguraActica coliciona se asigna una nueva figura a: figuraActiva y siguienteFigura
 	method asignarNuevaFiguraActiva(){
@@ -31,8 +32,8 @@ object controller{
 	//Metodo para asignar una nueva figura a siguienteFigura
 	method asignarSiguienteFigura(){
 		siguienteFigura = [new FiguraCuadrada(), new FiguraT(), new FiguraZ(), new FiguraI(), new FiguraL(), new FiguraLReverse(), new FiguraZReverse()].anyOne()
-		modeloSiguienteFigura = siguienteFigura
-		modeloSiguienteFigura.inicializarSiguienteFigura(modeloSiguienteFigura.listaBloque())
+		modeloSiguienteFigura = new SiguienteFigura()
+		modeloSiguienteFigura.listaDeBloques().addAll(siguienteFigura.listaBloque())
 	}
 	//inputs del teclado
 	method controlTeclado(){

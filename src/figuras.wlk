@@ -150,6 +150,7 @@ class FiguraLReverse inherits Figura{
 class SiguienteFigura{
 	var property posicionX = 12
 	var property posicionY = 7
+	var property listaDeBloques = []
 	method inicializarSiguienteFigura(lista){
 		lista.forEach({bloque =>game.addVisual(bloque)})
 	}
