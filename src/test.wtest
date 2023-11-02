@@ -1,0 +1,16 @@
+import figuras.*
+import wollok.game.*
+
+describe "mover figuraT"{
+
+	const figuraX = new FiguraT()
+	
+	test "cuando la figura se inicializa en la coordenada (4, 16) y se mueve para la derecha, la figura se mueve 1 para la derecha" {
+	
+		figuraX.inicializarFigura()
+		figuraX.moverDerecha()
+		
+		assert.equals(5, figuraX.listaBloque().head().position().x())
+		
+	}	
+}
