@@ -9,7 +9,7 @@
 
 ## Capturas
 
-(agregar)
+![Captura de pantalla 2023-11-02 004138](https://github.com/pdepjm/2023-o-tpi-game-los-inimputables/assets/129412499/752450d0-ffc9-4853-9725-ab78778644c5)
 
 ## Reglas de Juego / Instrucciones
 
