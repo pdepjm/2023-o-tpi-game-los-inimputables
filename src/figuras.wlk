@@ -13,6 +13,8 @@ class Textos{
 }
 object textoHighscore inherits Textos(position = new Position(x = 6, y = 3)){}
 object textoPuntos inherits Textos(position = new Position(x = 11, y = 0)){}
+
+
 //menu inicial y final
 class Menus{
 	var property image
@@ -20,110 +22,167 @@ class Menus{
 }
 object menuInicial inherits Menus(image = "assets/imagen_presentacion.jpg"){}
 object menuFinal inherits Menus(image = "assets/imagen_fin_juego.jpg"){}
+
+
 class Bloque{
 	var property image
-	var property position
-}
-class Figura{
-	var property listaBloque = []
 	//posicion relativa del eje X
 	var property posicionX = 4
 	//posicion relativa del eje Y
-	var property posicionY = 16	
-	method borrarVisual(){
-		listaBloque.forEach({bloque => game.removeVisual(bloque)})
-		listaBloque.clear()
-	}
-	 method cambiarPosicion(x,y){
-		posicionX = x
-		posicionY = y
+	var property posicionY = 16
+	var property position = new Position(x = posicionX, y = posicionY)
+	
+	method cambiarPosicion(nuevaPosicionX, nuevaPosicionY){
+		position = new Position(x = nuevaPosicionX, y = nuevaPosicionY)
 	}
 	//Pregunto si el bloque esta fuera del tablero con respecto al eje X
-	method bloqueFueraTabletoX() = listaBloque.any({bloque => bloque.position().x() > 8 || bloque.position().x() < 0})
+	method bloqueFueraTabletoX() = self.position().x() > 8 or self.position().x() < 0
  	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
- 	method bloqueFueraTabletoY() = listaBloque.any({bloque => bloque.position().y() < 0})
-	//Pregunto si el bloque colisiona con otro bloque any(b -> b.colisioneCon()
-	method colisionConBloque(bloqueDelTablero) =  listaBloque.any({bloque => bloque.position().y() == bloqueDelTablero.position().y() && bloque.position().x() == bloqueDelTablero.position().x()})
-	method mover(cantEjeX, cantEjeY){
-		listaBloque.forEach({bloque => bloque.position(new Position(x = bloque.position().x() + cantEjeX, y = bloque.position().y() + cantEjeY))})
+ 	method bloqueFueraTabletoY() = self.position().y() < 0
+ 	method colisionConAlgunBloque(bloquesDelTablero) = bloquesDelTablero.any({bloque => self.position().y() == bloque.position().y() and self.position().x() == bloque.position().x()})
+ 	method colisiona(bloquesDelTablero) = self.bloqueFueraTabletoX() or self.bloqueFueraTabletoY() or self.colisionConAlgunBloque(bloquesDelTablero)
+ 	method mover(cantEjeX, cantEjeY){
+ 		self.position(new Position(x = self.position().x() + cantEjeX, y = self.position().y() + cantEjeY))
+ 	}
+ 	method moverBloqueIzquierda(bloquesDelTablero, figura){
+ 		self.mover(-1, 0)
+ 		if(self.bloqueFueraTabletoX() or self.colisiona(bloquesDelTablero)){
+				figura.moverFiguraDerecha(bloquesDelTablero)
+		}
+ 	}
+ 	method moverBloqueDerecha(bloquesDelTablero, figura){
+ 		self.mover(1, 0)
+ 		if(self.bloqueFueraTabletoX() or self.colisiona(bloquesDelTablero)){
+				figura.moverFiguraIzquierda(bloquesDelTablero)
+		}
+ 	}
+ 	method moverBloqueAbajo(bloquesDelTablero, figura){
+ 		self.mover(0, -1)
+ 		if(self.bloqueFueraTabletoY() or self.colisiona(bloquesDelTablero)){
+				figura.moverFiguraArriba()
+		}
+ 	}
+ 	method moverBloqueArriba(){
+ 		self.mover(0, 1)
+ 	}
+	method rotarBloque(valorX, valorY, figura, bloquesDelTablero){
+		const centroX = figura.listaBloques().get(0).position().x()
+	    const centroY = figura.listaBloques().get(0).position().y()
+		var x
+		var y
+		x = self.position().x()
+	    y = self.position().y()
+	    self.position(new Position(x = centroX + valorX * (y - centroY), y = centroY + valorY * (x - centroX)))
 	}
-	method moverIzquierda(){
-		self.mover(-1, 0)
+	method rotarBloque90Grados(figura, bloquesDelTablero){
+		self.rotarBloque(-1, 1, figura, bloquesDelTablero)
+		if(self.colisiona(bloquesDelTablero)){
+	    		self.rotarBloque90GradosContraReloj(figura, bloquesDelTablero)
+	    }
 	}
-	method moverDerecha(){
-		self.mover(1, 0)
+	method rotarBloque90GradosContraReloj(figura, bloquesDelTablero){
+		self.rotarBloque(1, -1, figura, bloquesDelTablero)
+		if(self.colisiona(bloquesDelTablero)){
+	    		self.rotarBloque90Grados(figura, bloquesDelTablero)
+	    }
 	}
-	method moverAbajo(){
-		self.mover(0, -1)
+	method formarFigura(x1, y1, x2, y2, x3, y3, colorBloque) = 
+		[new Bloque(position = new Position(x=posicionX, y=posicionY), image = colorBloque), new Bloque(position = new Position(x=posicionX + x1, y=posicionY + y1), image = colorBloque),
+		 new Bloque(position = new Position(x=posicionX + x2, y=posicionY + y2), image = colorBloque), new Bloque(position = new Position(x=posicionX + x3, y=posicionY + y3), image = colorBloque)]
+	method borrarBloque(){
+		game.removeVisual(self)
+	}
+	method mostrarBloque(){
+		game.addVisual(self)
+	}
+}
+
+
+class Figura inherits Bloque{
+	var property listaBloques = []
+	
+	method moverFiguraIzquierda(bloquesDelTablero){
+		listaBloques.forEach({bloque => 
+			bloque.moverBloqueIzquierda(bloquesDelTablero, self)
+		})
+	}
+	method moverFiguraDerecha(bloquesDelTablero){
+		listaBloques.forEach({bloque => 
+			bloque.moverBloqueDerecha(bloquesDelTablero, self)
+		})
+	}
+	method moverFiguraAbajo(bloquesDelTablero){
+		listaBloques.forEach({bloque => 
+			bloque.moverBloqueAbajo(bloquesDelTablero, self)
+		})
 	}
 	// Mover arriba se utiliza al chequear colision
-	method moverArriba(){
-		self.mover(0, 1)
+	method moverFiguraArriba(){
+		listaBloques.forEach({bloque => bloque.moverBloqueArriba()})
 	}
-	method rotar(valorX, valorY){
-		const centroX = listaBloque.get(0).position().x()
-	    const centroY = listaBloque.get(0).position().y()
-	    listaBloque.forEach({ bloque =>
-	        var x = bloque.position().x()
-	        var y = bloque.position().y()
-	        bloque.position(new Position(x = centroX + valorX * (y - centroY), y = centroY + valorY * (x - centroX)))
-	    })
+	method cambiarPosicionFigura(nuevaPosicionX, nuevaPosicionY){
+		listaBloques.forEach({bloque => bloque.cambiarPosicion(nuevaPosicionX, nuevaPosicionY)})
 	}
-	method rotar90Grados(){
-	    self.rotar(-1, 1)
+	
+	method rotarFigura90Grados(bloquesDelTablero){
+		listaBloques.forEach({bloque =>
+	   		bloque.rotarBloque90Grados(self, bloquesDelTablero)
+		})
 	}
-	method rotar90GradosContraReloj(){
-		self.rotar(1, -1)
+	method rotarFigura90GradosContraReloj(bloquesDelTablero){
+		self.listaBloques().forEach({bloque => 
+			bloque.rotarBloque90Grados(self, bloquesDelTablero)
+			
+		})
 	}
-	method mostrarFigura(){
-		listaBloque.forEach({bloque =>game.addVisual(bloque)})
-	}
-	method formaFigura(x1, y1, x2, y2, x3, y3, colorBloque){
-		listaBloque.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = colorBloque), new Bloque(position = new Position(x=posicionX + x1, y=posicionY + y1), image = colorBloque),
-						    new Bloque(position = new Position(x=posicionX + x2, y=posicionY + y2), image = colorBloque), new Bloque(position = new Position(x=posicionX + x3, y=posicionY + y3), image = colorBloque)])
+	method figuraColisiona(bloquesDelTablero) = listaBloques.any({bloque => bloque.colisiona(bloquesDelTablero)})
+	method figura(x1, y1, x2, y2, x3, y3, colorBloque){
+		listaBloques.addAll(self.formarFigura(x1, y1, x2, y2, x3, y3, colorBloque))
 		self.mostrarFigura()
 	}
-}
-class FiguraCuadrada inherits Figura{
-	const bloqueAmarillo = "assets/bloque_amarillo.jpg"
-	override method rotar90Grados(){}
-	method inicializarFigura(){
-		self.formaFigura(1, 0, 0, -1, 1, -1, bloqueAmarillo)
+	method mostrarFigura(){
+		listaBloques.forEach({bloque => bloque.mostrarBloque()})
+	}
+	method borrarFigura(){
+		listaBloques.forEach({bloque => bloque.borrarBloque()})
+		listaBloques.clear()
 	}
 }
-class FiguraT inherits Figura{
-	const bloqueAzul = "assets/bloque_azul.jpg"
+
+
+class FiguraCuadrada inherits Figura(image = "assets/bloque_amarillo.jpg"){
+	override method rotarBloque(valorX, valorY, figura, bloquesDelTablero){}
 	method inicializarFigura(){
-		self.formaFigura(-1, 0, 1, 0, 0, -1, bloqueAzul)
+		self.figura(1, 0, 0, -1, 1, -1, image)
 	}
 }
-class FiguraZ inherits Figura{
-	const bloqueRojo = "assets/bloque_rojo.jpg"
+class FiguraT inherits Figura(image = "assets/bloque_azul.jpg"){
 	method inicializarFigura(){
-		self.formaFigura(0, 1, -1, 1, 1, 0, bloqueRojo)
+		self.figura(-1, 0, 1, 0, 0, -1, image)
 	}
 }
-class FiguraZReverse inherits Figura{
-	const bloqueVioleta = "assets/bloque_gris.jpg"
+class FiguraZ inherits Figura(image = "assets/bloque_rojo.jpg"){
 	method inicializarFigura(){
-		self.formaFigura(0, 1, 1, 1, -1, 0, bloqueVioleta)
+		self.figura(0, 1, -1, 1, 1, 0, image)
 	}
 }
-class FiguraI inherits Figura{
-	const bloqueRosa = "assets/bloque_rosa.jpg"
+class FiguraZReverse inherits Figura(image = "assets/bloque_gris.jpg"){
 	method inicializarFigura(){
-		self.formaFigura(0, 1, 0, 2, 0, 3, bloqueRosa)
+		self.figura(0, 1, 1, 1, -1, 0, image)
 	}
 }
-class FiguraL inherits Figura{
-	const bloqueVerde = "assets/bloque_verde.jpg"
+class FiguraI inherits Figura(image = "assets/bloque_rosa.jpg"){
 	method inicializarFigura(){
-		self.formaFigura(0, 1, 0, -1, 1, -1, bloqueVerde)
+		self.figura(0, 1, 0, 2, 0, 3, image)
 	}
 }
-class FiguraLReverse inherits Figura{
-	const bloqueNaranja = "assets/bloque_naranja.jpg"
+class FiguraL inherits Figura(image = "assets/bloque_verde.jpg"){
 	method inicializarFigura(){
-		self.formaFigura(0, 1, 0, -1, -1, -1, bloqueNaranja)
+		self.figura(0, 1, 0, -1, 1, -1, image)
+	}
+}
+class FiguraLReverse inherits Figura(image = "assets/bloque_naranja.jpg"){
+	method inicializarFigura(){
+		self.figura(0, 1, 0, -1, -1, -1, image)
 	}
 }

@@ -28,29 +28,25 @@ object controller{
 	//inicializo las figuras
 	method inicializarFiguras(){
 		figuraActiva.inicializarFigura()
-		siguienteFigura.cambiarPosicion(11, 4)
+		siguienteFigura.cambiarPosicionFigura(11, 4)
 		siguienteFigura.inicializarFigura()
 	}
 	//cuando FiguraActica coliciona se asigna una nueva figura tanto a figuraActiva como a siguienteFigura
 	method asignarNuevaFiguraActiva(){
-		siguienteFigura.cambiarPosicion(4,16)
+		siguienteFigura.cambiarPosicionFigura(4,16)
 		figuraActiva = siguienteFigura
-		siguienteFigura.borrarVisual()
+		siguienteFigura.borrarFigura()
 		self.asignarSiguienteFigura()
 		self.inicializarFiguras()
 	}
 	//inputs del teclado
 	method controlTeclado(){
-		keyboard.down().onPressDo({figuraActiva.moverAbajo() if(self.colisionaCon(figuraActiva)){figuraActiva.moverArriba()}})
-		keyboard.left().onPressDo({figuraActiva.moverIzquierda() if(self.colisionaCon(figuraActiva)){figuraActiva.moverDerecha()}})
-		keyboard.right().onPressDo({figuraActiva.moverDerecha() if(self.colisionaCon(figuraActiva)){figuraActiva.moverIzquierda()}})
-		keyboard.a().onPressDo({figuraActiva.rotar90Grados() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90GradosContraReloj()}})
-		keyboard.d().onPressDo({figuraActiva.rotar90GradosContraReloj() if(self.colisionaCon(figuraActiva)){figuraActiva.rotar90Grados()}})
+		keyboard.down().onPressDo({figuraActiva.moverFiguraAbajo(bloquesDelTablero)})
+		keyboard.left().onPressDo({figuraActiva.moverFiguraIzquierda(bloquesDelTablero)})
+		keyboard.right().onPressDo({figuraActiva.moverFiguraDerecha(bloquesDelTablero)})
+		keyboard.a().onPressDo({figuraActiva.rotarFigura90Grados(bloquesDelTablero)})
+		keyboard.d().onPressDo({figuraActiva.rotarFigura90GradosContraReloj(bloquesDelTablero)})
 		}
-	//Pregunto si la figura tiene algun tipo de colision
-	method colisionaCon(figura) = figura.bloqueFueraTabletoX() || figura.bloqueFueraTabletoY() || self.colisionConAlgunBloque(figura)
-	//Pregunto si la figura colisiona con otro bloque
-	method colisionConAlgunBloque(figura) = bloquesDelTablero.any({bloque => figura.colisionConBloque(bloque)})
 	//busco lineas completas para borrarlas
 	method buscarLineasCompletas(){
 		var lineas = 0
@@ -60,7 +56,6 @@ object controller{
 				self.gestionarBorradoDeFila(fila)
 			}
 		})
-		return lineas
 	}
 	//filtro solamente los bloques de la fila que estoy analizando
 	method bloquesDeUnaFila(fila) = bloquesDelTablero.filter({bloque => bloque.position().y() == fila})
@@ -74,7 +69,7 @@ object controller{
 	//borra la fila entera
 	method borrarFila(fila){
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() == fila) 
-			game.removeVisual(bloque)
+			bloque.borrarBloque()
 		})
 		bloquesDelTablero.removeAll(self.bloquesDeUnaFila(fila))
 		self.asignarPuntos()
@@ -87,7 +82,7 @@ object controller{
 	//muevo todos los bloques por arriba de la fila borrada, hacia abajo, la cantidad de filas que se borraron
 	method moverBloquesHaciaAbajo(fila){
 		bloquesDelTablero.forEach({bloque => if(bloque.position().y() > fila){
-				bloque.position(new Position(x = bloque.position().x(), y = bloque.position().y() - 1))
+				bloque.mover(0, -1)
 			}
 		})
 	}
@@ -98,8 +93,8 @@ object controller{
 	//si perdiste, aparece el menu final
 	method analizarPerder(){
 		if(self.perder()){
-			siguienteFigura.borrarVisual()
-			figuraActiva.borrarVisual()
+			siguienteFigura.borrarFigura()
+			figuraActiva.borrarFigura()
 			game.removeTickEvent("gravedad")
 			game.addVisual(menuFinal)
 			game.removeVisual(textoPuntos)
@@ -115,7 +110,7 @@ object controller{
 		keyboard.space().onPressDo({
 			if(t == 0){
 				game.removeVisual(menuFinal)
-				bloquesDelTablero.forEach({bloque => game.removeVisual(bloque)})
+				bloquesDelTablero.forEach({bloque => bloque.borrarBloque()})
 				bloquesDelTablero.clear()
 				textoPuntos.position(new Position(x = 11, y = 0))
 				game.removeVisual(textoHighscore)
@@ -156,11 +151,10 @@ object controller{
 	method empezarJuego(){
 		self.inicializarJuego()
 		game.onTick(500, "gravedad", {
-			figuraActiva.moverAbajo()
+			figuraActiva.moverFiguraAbajo(bloquesDelTablero)
 			self.buscarLineasCompletas()
-			if (bloquesDelTablero.any({ bloque => figuraActiva.colisionConBloque(bloque)}) or figuraActiva.bloqueFueraTabletoY()) {
-				figuraActiva.moverArriba()
-				bloquesDelTablero.addAll(figuraActiva.listaBloque())
+			if(figuraActiva.figuraColisiona(bloquesDelTablero) or figuraActiva.listaBloques().any({bloque => bloque.position().y() == 0})){
+				bloquesDelTablero.addAll(figuraActiva.listaBloques())
 				self.asignarNuevaFiguraActiva()
 			}
 			textoPuntos.cambiarPuntaje(puntaje.toString())
