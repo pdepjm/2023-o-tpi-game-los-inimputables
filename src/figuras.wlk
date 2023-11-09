@@ -1,4 +1,5 @@
 import wollok.game.*
+import controller.*
 //Todas las figuras del juego
 
 //textos del puntaje actual y del highScore
@@ -26,41 +27,33 @@ object menuFinal inherits Menus(image = "assets/imagen_fin_juego.jpg"){}
 
 class Bloque{
 	var property image
-	//posicion relativa del eje X
-	var property posicionX = 4
-	//posicion relativa del eje Y
-	var property posicionY = 16
-	var property position = new Position(x = posicionX, y = posicionY)
+	var property position
 	
-	method cambiarPosicion(nuevaPosicionX, nuevaPosicionY){
-		position = new Position(x = nuevaPosicionX, y = nuevaPosicionY)
-	}
 	//Pregunto si el bloque esta fuera del tablero con respecto al eje X
-	method bloqueFueraTabletoX() = self.position().x() > 8 or self.position().x() < 0
+	method bloqueFueraTableroX() = self.position().x() > 8 or self.position().x() < 0
  	//Pregunto si el bloque esta fuera del tablero con respecto al eje Y
- 	method bloqueFueraTabletoY() = self.position().y() < 0
+ 	method bloqueFueraTableroY() = self.position().y() < 0
+ 	method bloqueEnBordeTableroY() = self.position().y() == 0
+ 	method bloqueSobresalidoY() = self.position().y() >= 14
  	method colisionConAlgunBloque(bloquesDelTablero) = bloquesDelTablero.any({bloque => self.position().y() == bloque.position().y() and self.position().x() == bloque.position().x()})
- 	method colisiona(bloquesDelTablero) = self.bloqueFueraTabletoX() or self.bloqueFueraTabletoY() or self.colisionConAlgunBloque(bloquesDelTablero)
+ 	method colisiona(bloquesDelTablero) = self.bloqueFueraTableroX() or self.bloqueFueraTableroY() or self.colisionConAlgunBloque(bloquesDelTablero)
  	method mover(cantEjeX, cantEjeY){
  		self.position(new Position(x = self.position().x() + cantEjeX, y = self.position().y() + cantEjeY))
  	}
  	method moverBloqueIzquierda(bloquesDelTablero, figura){
  		self.mover(-1, 0)
- 		if(self.bloqueFueraTabletoX() or self.colisiona(bloquesDelTablero)){
+ 		if(self.colisiona(bloquesDelTablero)){
 				figura.moverFiguraDerecha(bloquesDelTablero)
 		}
  	}
  	method moverBloqueDerecha(bloquesDelTablero, figura){
  		self.mover(1, 0)
- 		if(self.bloqueFueraTabletoX() or self.colisiona(bloquesDelTablero)){
+ 		if(self.colisiona(bloquesDelTablero)){
 				figura.moverFiguraIzquierda(bloquesDelTablero)
 		}
  	}
- 	method moverBloqueAbajo(bloquesDelTablero, figura){
+ 	method moverBloqueAbajo(){
  		self.mover(0, -1)
- 		if(self.bloqueFueraTabletoY() or self.colisiona(bloquesDelTablero)){
-				figura.moverFiguraArriba()
-		}
  	}
  	method moverBloqueArriba(){
  		self.mover(0, 1)
@@ -86,9 +79,6 @@ class Bloque{
 	    		self.rotarBloque90Grados(figura, bloquesDelTablero)
 	    }
 	}
-	method formarFigura(x1, y1, x2, y2, x3, y3, colorBloque) = 
-		[new Bloque(position = new Position(x=posicionX, y=posicionY), image = colorBloque), new Bloque(position = new Position(x=posicionX + x1, y=posicionY + y1), image = colorBloque),
-		 new Bloque(position = new Position(x=posicionX + x2, y=posicionY + y2), image = colorBloque), new Bloque(position = new Position(x=posicionX + x3, y=posicionY + y3), image = colorBloque)]
 	method borrarBloque(){
 		game.removeVisual(self)
 	}
@@ -98,9 +88,18 @@ class Bloque{
 }
 
 
-class Figura inherits Bloque{
+class Figura{
+	var property image
 	var property listaBloques = []
+	//posicion relativa del eje X
+	var property posicionX = 4
+	//posicion relativa del eje Y
+	var property posicionY = 16
 	
+	method cambiarPosicionFigura(nuevaPosicionX, nuevaPosicionY){
+		posicionX = nuevaPosicionX
+		posicionY = nuevaPosicionY
+	}
 	method moverFiguraIzquierda(bloquesDelTablero){
 		listaBloques.forEach({bloque => 
 			bloque.moverBloqueIzquierda(bloquesDelTablero, self)
@@ -111,19 +110,16 @@ class Figura inherits Bloque{
 			bloque.moverBloqueDerecha(bloquesDelTablero, self)
 		})
 	}
-	method moverFiguraAbajo(bloquesDelTablero){
+	method moverFiguraAbajo(){
 		listaBloques.forEach({bloque => 
-			bloque.moverBloqueAbajo(bloquesDelTablero, self)
+			bloque.moverBloqueAbajo()
 		})
 	}
-	// Mover arriba se utiliza al chequear colision
 	method moverFiguraArriba(){
-		listaBloques.forEach({bloque => bloque.moverBloqueArriba()})
+		listaBloques.forEach({bloque => 
+			bloque.moverBloqueArriba()
+		})
 	}
-	method cambiarPosicionFigura(nuevaPosicionX, nuevaPosicionY){
-		listaBloques.forEach({bloque => bloque.cambiarPosicion(nuevaPosicionX, nuevaPosicionY)})
-	}
-	
 	method rotarFigura90Grados(bloquesDelTablero){
 		listaBloques.forEach({bloque =>
 	   		bloque.rotarBloque90Grados(self, bloquesDelTablero)
@@ -135,9 +131,10 @@ class Figura inherits Bloque{
 			
 		})
 	}
-	method figuraColisiona(bloquesDelTablero) = listaBloques.any({bloque => bloque.colisiona(bloquesDelTablero)})
+	method figuraColisiona(bloquesDelTablero) = self.listaBloques().any({bloque => bloque.colisiona(bloquesDelTablero)})
 	method figura(x1, y1, x2, y2, x3, y3, colorBloque){
-		listaBloques.addAll(self.formarFigura(x1, y1, x2, y2, x3, y3, colorBloque))
+		listaBloques.addAll([new Bloque(position = new Position(x=posicionX, y=posicionY), image = colorBloque), new Bloque(position = new Position(x=posicionX + x1, y=posicionY + y1), image = colorBloque),
+		 					 new Bloque(position = new Position(x=posicionX + x2, y=posicionY + y2), image = colorBloque), new Bloque(position = new Position(x=posicionX + x3, y=posicionY + y3), image = colorBloque)])
 		self.mostrarFigura()
 	}
 	method mostrarFigura(){
@@ -151,7 +148,12 @@ class Figura inherits Bloque{
 
 
 class FiguraCuadrada inherits Figura(image = "assets/bloque_amarillo.jpg"){
-	override method rotarBloque(valorX, valorY, figura, bloquesDelTablero){}
+	override method rotarFigura90Grados(bloquesDelTablero){
+		self.moverFiguraArriba()
+	}
+	override method rotarFigura90GradosContraReloj(bloquesDelTablero){
+		self.moverFiguraAbajo()
+	}
 	method inicializarFigura(){
 		self.figura(1, 0, 0, -1, 1, -1, image)
 	}

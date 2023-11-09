@@ -16,8 +16,8 @@ object controller{
 	}
 	//Inicializo el juego
 	method inicializarJuego(){
-		figuraActiva = listaDeFiguras.anyOne()
 		self.construccionDeFilas()
+		figuraActiva = listaDeFiguras.anyOne()
 		self.asignarSiguienteFigura()
 		self.inicializarFiguras()
 	}
@@ -41,7 +41,7 @@ object controller{
 	}
 	//inputs del teclado
 	method controlTeclado(){
-		keyboard.down().onPressDo({figuraActiva.moverFiguraAbajo(bloquesDelTablero)})
+		keyboard.down().onPressDo({figuraActiva.moverFiguraAbajo()})
 		keyboard.left().onPressDo({figuraActiva.moverFiguraIzquierda(bloquesDelTablero)})
 		keyboard.right().onPressDo({figuraActiva.moverFiguraDerecha(bloquesDelTablero)})
 		keyboard.a().onPressDo({figuraActiva.rotarFigura90Grados(bloquesDelTablero)})
@@ -68,7 +68,7 @@ object controller{
 	}
 	//borra la fila entera
 	method borrarFila(fila){
-		bloquesDelTablero.forEach({bloque => if(bloque.position().y() == fila) 
+		self.bloquesDeUnaFila(fila).forEach({bloque =>
 			bloque.borrarBloque()
 		})
 		bloquesDelTablero.removeAll(self.bloquesDeUnaFila(fila))
@@ -86,8 +86,9 @@ object controller{
 			}
 		})
 	}
+	
 	//pregunto si hay alguna figura sobresalida del tablero
-	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.position().y() >= 14})
+	method hayUnaFiguraSobresalida() = bloquesDelTablero.any({bloque => bloque.bloqueSobresalidoY()})
 	//analiza si perdiste, osea si sobresalio alguna figura
 	method perder() = self.hayUnaFiguraSobresalida()
 	//si perdiste, aparece el menu final
@@ -151,14 +152,17 @@ object controller{
 	method empezarJuego(){
 		self.inicializarJuego()
 		game.onTick(500, "gravedad", {
-			figuraActiva.moverFiguraAbajo(bloquesDelTablero)
+			figuraActiva.moverFiguraAbajo()
+			textoPuntos.cambiarPuntaje(puntaje.toString())
 			self.buscarLineasCompletas()
-			if(figuraActiva.figuraColisiona(bloquesDelTablero) or figuraActiva.listaBloques().any({bloque => bloque.position().y() == 0})){
+			self.analizarPerder()
+		})
+		game.onTick(1, "controlador colisiones", {
+			if(figuraActiva.figuraColisiona(bloquesDelTablero)){
+ 				figuraActiva.moverFiguraArriba()
 				bloquesDelTablero.addAll(figuraActiva.listaBloques())
 				self.asignarNuevaFiguraActiva()
 			}
-			textoPuntos.cambiarPuntaje(puntaje.toString())
-			self.analizarPerder()
 		})
 	}
 }
